@@ -102,6 +102,10 @@ fieldset legend {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.mood-group-grid {
+  margin-bottom: 10px;
+}
+
 .time-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -391,6 +395,13 @@ fieldset legend {
 .page-note span:last-child {
   color: #7a8781;
   font-size: 0.91rem;
+}
+
+.footer-notice {
+  margin: 5px 2px 0;
+  color: #7a8781;
+  font-size: 0.86rem;
+  line-height: 1.6;
 }
 
 .notice {
