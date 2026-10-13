@@ -1,0 +1,847 @@
+{
+  "schema_version": "0.1.0",
+  "project_name": "퇴근 5분 전",
+  "subtitle": "선생님에서 나로 돌아오는 작은 시간",
+  "locale": "ko-KR",
+  "created_at": "2026-10-13",
+  "stage": "1단계 기획 및 콘텐츠 준비",
+  "editorial_policy": "문장과 활동 문구는 이 앱을 위해 새로 작성했습니다. 장소별 제안은 편집 아이디어이며 운영기관의 프로그램이 아닙니다.",
+  "inputs": {
+    "moods": [
+      {
+        "id": "tired",
+        "label": "지침"
+      },
+      {
+        "id": "tangled",
+        "label": "복잡함"
+      },
+      {
+        "id": "hurt",
+        "label": "서운함"
+      },
+      {
+        "id": "empty",
+        "label": "허전함"
+      },
+      {
+        "id": "proud",
+        "label": "뿌듯함"
+      },
+      {
+        "id": "calm",
+        "label": "평온함"
+      }
+    ],
+    "mood_selection": {
+      "max_selected": 1,
+      "required": false,
+      "skip_label": "잘 모르겠어요",
+      "skip_value": null
+    },
+    "time_budgets_minutes": [
+      5,
+      15,
+      30
+    ],
+    "default_time_budget_minutes": 5,
+    "time_label": "오늘 나에게 쓸 수 있는 시간",
+    "time_note": "앱을 쓰는 시간이 아니라 활동 시간입니다. 장소까지 이동하는 시간은 별도예요."
+  },
+  "ui_copy": {
+    "title": "퇴근 5분 전",
+    "intro": "오늘의 선생님 역할은 잠깐 내려놓고",
+    "question": "지금, 내 마음은 어떤가요?",
+    "submit": "나를 위한 추천 보기",
+    "rest": "그냥 쉴래요",
+    "rest_message": "좋아요. 아무것도 더하지 않는 저녁도 내 선택이에요.",
+    "rest_exit": "이제 이 화면을 닫아도 좋아요.",
+    "liked": "좋았어요",
+    "liked_active": "좋았어요 저장됨",
+    "saved_label": "좋았던 활동",
+    "saved_note": "활동 번호만 이 브라우저에 저장돼요. 공용 PC에서는 저장하지 않거나, 이용 후 지워주세요.",
+    "delete": "저장한 활동 모두 지우기",
+    "delete_confirm": "이 브라우저에 저장한 활동을 모두 지울까요?",
+    "storage_error": "이 브라우저에는 저장하지 못했어요. 추천은 계속 볼 수 있어요.",
+    "place_heading": "대전의 예시 장소",
+    "place_note": "가까울 때만 들러보세요. 이동 시간은 별도이며 방문 전 운영 안내를 확인해 주세요."
+  },
+  "recommendation_rules": {
+    "engine": "static_rules_no_ai_api",
+    "categories": [
+      {
+        "id": "pause",
+        "label": "가볍게 쉬기"
+      },
+      {
+        "id": "enjoy",
+        "label": "작게 즐기기"
+      },
+      {
+        "id": "refresh",
+        "label": "기분 환기"
+      }
+    ],
+    "card_count": 3,
+    "max_away_cards": 1,
+    "eligibility": "enabled=true, minutes<=선택 시간, mood_tags에 선택한 mood 또는 any 포함. mood가 null이면 any만 포함.",
+    "rank": [
+      "minutes 내림차순",
+      "선택 mood와 직접 일치하는 항목 먼저",
+      "id 오름차순"
+    ],
+    "selection": "pause → enjoy → refresh 순서로 한 개씩 선택합니다. 집 밖 활동이 이미 선택되었다면 이후 슬롯에서는 집 밖 후보를 제외합니다. 중복 ID는 제외하고, 빈 슬롯은 해당 category의 fallback을 사용합니다.",
+    "home_alternative_display": "집 밖 카드 상세에는 집에서 할래요를 표시합니다. 누르면 home_alternative_id의 활동으로 바꾸고, 다른 카드와 중복되면 해당 슬롯의 fallback을 표시합니다.",
+    "phrase": "추천 요청 시 선택 mood 전용 문장 세 개 중 한 개를 같은 확률로 무작위 선택합니다. 건너뛰면 q19·q20 중 하나를 고릅니다. 현재 화면을 읽는 중에는 문장을 유지하고, 선택 이력은 저장하지 않습니다.",
+    "home_guarantee": "enjoy는 집 안 활동으로 구성합니다. 모든 집 밖 활동에는 시간이 늘어나지 않는 집 안 대안이 있습니다.",
+    "place_display": "place_ids는 카드 상세에서만 노출합니다. 거리순 추천과 현재 영업 중 표시는 하지 않습니다. 대안 장소는 최대 3곳이며 이동 시간은 추정하지 않습니다.",
+    "fallback_by_category": {
+      "pause": "a01",
+      "enjoy": "a02",
+      "refresh": "a03"
+    },
+    "error_behavior": "잘못된 mood는 null, 잘못된 시간은 5로 처리합니다. 파일 로딩 실패 시 첫 화면에 내장한 q20 및 a01·a02·a03와 그냥 쉴래요를 표시합니다."
+  },
+  "storage": {
+    "key": "after-five:likes:v1",
+    "example": {
+      "version": 1,
+      "activity_ids": [
+        "a02",
+        "a11"
+      ]
+    },
+    "persist": [
+      "좋았어요를 누른 활동 ID"
+    ],
+    "transient": [
+      "현재 mood",
+      "선택 시간",
+      "현재 추천 결과"
+    ],
+    "excluded": [
+      "감정 이력",
+      "학생·학교 정보",
+      "자유 서술",
+      "기기 간 동기화",
+      "위치 이력",
+      "성과·연속 사용 기록"
+    ],
+    "behavior": "활동 ID를 토글로 저장·취소합니다. 저장은 추천 순위에 영향을 주지 않습니다. 알 수 없는 ID와 손상 데이터는 버리고, 접근 실패는 알림만 표시합니다.",
+    "clear": "저장한 활동 화면에서 한 번 확인 후 앱 전용 key만 삭제합니다.",
+    "shared_device_note": "localStorage는 암호화 금고가 아닙니다. 같은 브라우저 사용자는 저장 목록을 볼 수 있으며, 브라우저 데이터 삭제 시 목록이 사라집니다.",
+    "analytics": "첫 버전은 감정·클릭 분석 SDK를 넣지 않습니다. mood를 URL이나 외부 지도 검색어에 넣지 않습니다."
+  },
+  "implementation_stages": {
+    "vscode": "2단계: HTML/CSS/JavaScript와 이 JSON으로 로컬 MVP 제작",
+    "vercel": "3단계: 반응형 웹 배포 및 실제 휴대폰 확인",
+    "supabase": "4단계: 공개 문장·활동·장소 목록 관리. 사용자 감정은 저장하지 않음",
+    "notifications": "5단계: 실제 필요가 확인되면 사용자 선택형 알림 검토"
+  },
+  "phrases": [
+    {
+      "id": "q01",
+      "mood_tags": [
+        "tired"
+      ],
+      "text": "하루 종일 누군가의 이야기를 들었다면, 이제는 조용해도 좋아요.",
+      "enabled": true
+    },
+    {
+      "id": "q02",
+      "mood_tags": [
+        "tired"
+      ],
+      "text": "오늘의 에너지를 다 썼다면, 저녁까지 잘해내려 애쓰지 않아도 돼요.",
+      "enabled": true
+    },
+    {
+      "id": "q03",
+      "mood_tags": [
+        "tired"
+      ],
+      "text": "잠깐 기대어 있는 시간에도 내 저녁은 흘러가고 있어요.",
+      "enabled": true
+    },
+    {
+      "id": "q04",
+      "mood_tags": [
+        "tangled"
+      ],
+      "text": "정리되지 않은 마음을 그대로 둔 채 퇴근해도 괜찮아요.",
+      "enabled": true
+    },
+    {
+      "id": "q05",
+      "mood_tags": [
+        "tangled"
+      ],
+      "text": "답을 찾는 일은 잠깐 멈추고, 눈앞의 저녁부터 만나볼까요.",
+      "enabled": true
+    },
+    {
+      "id": "q06",
+      "mood_tags": [
+        "tangled"
+      ],
+      "text": "모든 생각을 마무리해야만 쉴 수 있는 건 아니에요.",
+      "enabled": true
+    },
+    {
+      "id": "q07",
+      "mood_tags": [
+        "hurt"
+      ],
+      "text": "오늘 들은 말보다, 내가 좋아하는 소리를 먼저 들어볼까요.",
+      "enabled": true
+    },
+    {
+      "id": "q08",
+      "mood_tags": [
+        "hurt"
+      ],
+      "text": "마음에 남은 일을 지금 당장 설명하지 않아도 돼요.",
+      "enabled": true
+    },
+    {
+      "id": "q09",
+      "mood_tags": [
+        "hurt"
+      ],
+      "text": "다른 사람의 반응과 별개로, 내 취향을 위한 시간은 남겨둘 수 있어요.",
+      "enabled": true
+    },
+    {
+      "id": "q10",
+      "mood_tags": [
+        "empty"
+      ],
+      "text": "대단한 계획 대신, 작게 좋아하는 것 하나면 어때요.",
+      "enabled": true
+    },
+    {
+      "id": "q11",
+      "mood_tags": [
+        "empty"
+      ],
+      "text": "이유 없이 끌리는 것을 골라도 되는 시간이 왔어요.",
+      "enabled": true
+    },
+    {
+      "id": "q12",
+      "mood_tags": [
+        "empty"
+      ],
+      "text": "오늘 저녁에는 익숙한 즐거움을 다시 만나도 좋아요.",
+      "enabled": true
+    },
+    {
+      "id": "q13",
+      "mood_tags": [
+        "proud"
+      ],
+      "text": "오늘의 좋은 기분을 서둘러 다음 할 일로 바꾸지 않아도 돼요.",
+      "enabled": true
+    },
+    {
+      "id": "q14",
+      "mood_tags": [
+        "proud"
+      ],
+      "text": "기쁜 마음을 좋아하는 노래 한 곡만큼 더 누려볼까요.",
+      "enabled": true
+    },
+    {
+      "id": "q15",
+      "mood_tags": [
+        "proud"
+      ],
+      "text": "더 큰 성취를 보태지 않고, 지금의 만족을 즐겨도 좋아요.",
+      "enabled": true
+    },
+    {
+      "id": "q16",
+      "mood_tags": [
+        "calm"
+      ],
+      "text": "편안한 마음에 굳이 새로운 할 일을 더하지 않아도 돼요.",
+      "enabled": true
+    },
+    {
+      "id": "q17",
+      "mood_tags": [
+        "calm"
+      ],
+      "text": "별일 없는 저녁도 내가 좋아하는 하루의 일부예요.",
+      "enabled": true
+    },
+    {
+      "id": "q18",
+      "mood_tags": [
+        "calm"
+      ],
+      "text": "오늘은 내 속도에 맞는 작은 즐거움을 골라볼까요.",
+      "enabled": true
+    },
+    {
+      "id": "q19",
+      "mood_tags": [
+        "any"
+      ],
+      "text": "선생님이라는 이름 옆에, 오늘은 내 이름도 놓아둘까요.",
+      "enabled": true
+    },
+    {
+      "id": "q20",
+      "mood_tags": [
+        "any"
+      ],
+      "text": "무엇을 골라도, 아무것도 고르지 않아도 내 저녁이에요.",
+      "enabled": true
+    }
+  ],
+  "activities": [
+    {
+      "id": "a01",
+      "title": "등받이에 기대어 잠깐",
+      "category": "pause",
+      "minutes": 5,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "home",
+      "body": "등받이가 있는 편한 자리에 앉아 잠깐 기대어 보세요. 자세를 잘 만들려고 애쓰지 않아도 돼요.",
+      "materials": "편한 자리",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a02",
+      "title": "좋아하는 노래 한 곡",
+      "category": "enjoy",
+      "minutes": 5,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "home",
+      "body": "이미 즐겨 듣는 노래 한 곡을 틀어보세요. 다음 곡을 고를 필요는 없어요.",
+      "materials": "평소 쓰는 음악 재생 수단",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a03",
+      "title": "창밖에 잠깐 시선 두기",
+      "category": "refresh",
+      "minutes": 5,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "home",
+      "body": "창밖의 하늘이나 멀리 있는 풍경을 잠깐 바라보세요. 창이 없다면 실내에서 마음에 드는 색을 찾아봐도 좋아요.",
+      "materials": "없음",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a04",
+      "title": "말없이 한 모금",
+      "category": "pause",
+      "minutes": 5,
+      "mood_tags": [
+        "tired",
+        "tangled",
+        "hurt"
+      ],
+      "setting": "home",
+      "body": "물이나 집에 있는 음료를 한 모금 마셔보세요. 그동안은 누군가에게 설명할 말도 준비하지 않아도 돼요.",
+      "materials": "물 또는 이미 있는 음료",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a05",
+      "title": "좋았던 사진 한 장",
+      "category": "enjoy",
+      "minutes": 5,
+      "mood_tags": [
+        "empty",
+        "proud",
+        "calm"
+      ],
+      "setting": "home",
+      "body": "내 사진첩에서 보고 싶은 사진 한 장을 골라보세요. 정리하거나 공유하지 않고 보기만 해도 좋아요.",
+      "materials": "개인 사진첩",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a06",
+      "title": "손에 닿는 감촉 느끼기",
+      "category": "refresh",
+      "minutes": 5,
+      "mood_tags": [
+        "tired",
+        "hurt"
+      ],
+      "setting": "home",
+      "body": "소매나 담요처럼 부드러운 것을 손으로 만져보세요. 마음에 드는 감촉에 잠깐 머물러도 좋아요.",
+      "materials": "손에 닿는 천이나 담요",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a07",
+      "title": "말하지 않는 15분",
+      "category": "pause",
+      "minutes": 15,
+      "mood_tags": [
+        "tired",
+        "tangled"
+      ],
+      "setting": "home",
+      "body": "편한 자리에 앉아 말하지 않는 시간을 가져보세요. 조용함이 어색하다면 익숙한 음악을 작게 틀어도 좋아요.",
+      "materials": "편한 자리",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a08",
+      "title": "한 곡을 두 번 듣기",
+      "category": "enjoy",
+      "minutes": 15,
+      "mood_tags": [
+        "empty",
+        "hurt"
+      ],
+      "setting": "home",
+      "body": "마음에 드는 노래를 한 번 더 들어보세요. 새로운 곡을 찾거나 재생목록을 만들 필요는 없어요.",
+      "materials": "평소 쓰는 음악 재생 수단",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a09",
+      "title": "가까운 길 짧게 걷기",
+      "category": "refresh",
+      "minutes": 15,
+      "mood_tags": [
+        "tangled",
+        "proud",
+        "calm"
+      ],
+      "setting": "outdoor",
+      "body": "이미 가까이 있다면 익숙한 산책로를 내 속도로 걸어보세요. 어디까지 가야 한다는 목표는 두지 않아도 돼요.",
+      "materials": "걷기 편한 신발",
+      "place_ids": [
+        "p01",
+        "p02",
+        "p03"
+      ],
+      "home_alternative_id": "a03",
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a10",
+      "title": "바깥 풍경 앞에 머물기",
+      "category": "pause",
+      "minutes": 15,
+      "mood_tags": [
+        "tired",
+        "hurt",
+        "calm"
+      ],
+      "setting": "outdoor",
+      "body": "가까운 야외 공간의 앉을 수 있는 자리에서 풍경을 바라보세요. 자리가 없거나 날씨가 불편하면 집에서 쉬어도 좋아요.",
+      "materials": "없음",
+      "place_ids": [
+        "p01",
+        "p02",
+        "p04"
+      ],
+      "home_alternative_id": "a01",
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a11",
+      "title": "책 몇 쪽만 구경하기",
+      "category": "enjoy",
+      "minutes": 15,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "home",
+      "body": "집에 있는 책이나 잡지에서 끌리는 쪽을 펼쳐보세요. 처음부터 읽거나 끝까지 읽을 필요는 없어요.",
+      "materials": "이미 가진 책이나 잡지",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a12",
+      "title": "종이에 선 몇 개",
+      "category": "enjoy",
+      "minutes": 15,
+      "mood_tags": [
+        "tangled",
+        "empty",
+        "proud"
+      ],
+      "setting": "home",
+      "body": "종이에 선이나 작은 모양을 그려보세요. 무엇을 그린 건지 이름 붙이거나 잘 그리려 하지 않아도 돼요.",
+      "materials": "종이와 펜",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a13",
+      "title": "지금 보이는 색 찾기",
+      "category": "refresh",
+      "minutes": 15,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "outdoor",
+      "body": "가까운 바깥 풍경에서 마음에 드는 색 하나를 찾아보세요. 사진으로 남기지 않고 눈으로만 봐도 좋아요.",
+      "materials": "없음",
+      "place_ids": [
+        "p02",
+        "p04"
+      ],
+      "home_alternative_id": "a03",
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a14",
+      "title": "가장 편한 자리에 앉기",
+      "category": "pause",
+      "minutes": 15,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "home",
+      "body": "집에서 가장 편한 자리를 골라 앉아보세요. 오늘 저녁의 계획은 아직 세우지 않아도 돼요.",
+      "materials": "편한 자리",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a15",
+      "title": "아무 일정 없는 반 시간",
+      "category": "pause",
+      "minutes": 30,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "home",
+      "body": "반 시간만 비워두고 편하게 쉬어보세요. 중간에 다른 일을 하거나 더 쉬고 싶어져도 괜찮아요.",
+      "materials": "편한 자리",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a16",
+      "title": "오래 좋아한 음악 듣기",
+      "category": "enjoy",
+      "minutes": 30,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "home",
+      "body": "익숙한 앨범이나 좋아하던 곡들을 틀어보세요. 음악을 듣는 동안 다른 성과를 만들지 않아도 돼요.",
+      "materials": "평소 쓰는 음악 재생 수단",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a17",
+      "title": "공원에서 내 속도로 걷기",
+      "category": "refresh",
+      "minutes": 30,
+      "mood_tags": [
+        "any"
+      ],
+      "setting": "outdoor",
+      "body": "이미 가까운 공원에 있다면 가고 싶은 만큼만 걸어보세요. 공원을 모두 돌지 않고 돌아와도 좋아요.",
+      "materials": "걷기 편한 신발",
+      "place_ids": [
+        "p01",
+        "p02"
+      ],
+      "home_alternative_id": "a03",
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a18",
+      "title": "도서관에서 끌리는 책 펼치기",
+      "category": "refresh",
+      "minutes": 30,
+      "mood_tags": [
+        "tangled",
+        "empty",
+        "calm"
+      ],
+      "setting": "indoor_away",
+      "body": "운영 중인 가까운 도서관에서 제목이 끌리는 책을 펼쳐보세요. 공부할 책을 고르거나 대출할 필요는 없어요.",
+      "materials": "없음",
+      "place_ids": [
+        "p05"
+      ],
+      "home_alternative_id": "a11",
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a19",
+      "title": "웃겼던 영상 다시 보기",
+      "category": "enjoy",
+      "minutes": 30,
+      "mood_tags": [
+        "tired",
+        "hurt",
+        "empty"
+      ],
+      "setting": "home",
+      "body": "전에 즐겁게 봤던 영상 한 편을 다시 골라보세요. 자동 재생을 끄고 보고 싶은 부분까지만 봐도 좋아요.",
+      "materials": "평소 이용하는 영상과 기기",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    },
+    {
+      "id": "a20",
+      "title": "사진첩 속 여행 다시 가기",
+      "category": "enjoy",
+      "minutes": 30,
+      "mood_tags": [
+        "proud",
+        "calm",
+        "empty"
+      ],
+      "setting": "home",
+      "body": "보고 싶은 나들이나 여행 사진을 천천히 넘겨보세요. 다음 여행을 예약하거나 계획하지 않아도 괜찮아요.",
+      "materials": "개인 사진첩",
+      "place_ids": [],
+      "home_alternative_id": null,
+      "cost_note": "새 구매 없이, 이미 가진 물건과 이용 중인 서비스를 기준으로 한 제안입니다. 이동·주차·별도 시설 비용은 포함하지 않습니다.",
+      "enabled": true
+    }
+  ],
+  "places": [
+    {
+      "id": "p01",
+      "name": "한밭수목원 동원",
+      "setting": "outdoor",
+      "area": "대전 서구 만년동",
+      "address": "대전광역시 서구 둔산대로 169",
+      "verified_facts": [
+        "동원은 4~10월 관람 05:00~21:00, 입장 마감 20:00입니다.",
+        "11~3월 관람 07:00~19:00, 입장 마감 18:00입니다.",
+        "동원은 매주 월요일 휴원하며, 휴원일이 공휴일이면 정상 개원합니다.",
+        "입장료는 무료입니다."
+      ],
+      "hours_note": "계절별 시간·월요일 휴원 확인",
+      "fee_krw": 0,
+      "fee_note": "입장 무료. 이동·주차 비용 별도.",
+      "availability_note": "동원을 기준으로 합니다. 인접한 서원은 2026-10-17 16:00~21:00 임시 폐쇄 공지가 있으므로 주변 통행은 현장 안내를 확인하세요.",
+      "editorial_suggestion": "정해진 코스 없이 눈에 들어오는 나무를 보며 15~30분 머무르기",
+      "official_url": "https://daejeon.go.kr/gar/contentsHtmlView.do?menuSeq=8024",
+      "source_ids": [
+        "s01",
+        "s02"
+      ],
+      "checked_at": "2026-10-13",
+      "verification_scope": "공식 공개 자료의 장소·주소와 명시된 운영 정보 확인",
+      "live_availability": false,
+      "travel_minutes": null,
+      "enabled": true
+    },
+    {
+      "id": "p02",
+      "name": "유림공원",
+      "setting": "outdoor",
+      "area": "대전 유성구 어은동",
+      "address": "대전광역시 유성구 어은로 27",
+      "verified_facts": [
+        "유성구 공식 관광 안내에 주소와 공원 산책 공간이 소개되어 있습니다."
+      ],
+      "hours_note": "방문 전 행사·현장 통행 안내 확인",
+      "fee_krw": null,
+      "fee_note": "야외 산책 제안. 별도 시설·주차 요금은 확인 후 이용하세요.",
+      "availability_note": "실시간 혼잡도와 통행 가능 여부는 제공하지 않습니다.",
+      "editorial_suggestion": "가까이 있다면 공원의 색과 풍경을 보며 15~30분 머무르기",
+      "official_url": "https://www.yuseong.go.kr/prog/trrsrt/TRSE_01/tour/sub02_01/view.do?trrsrtNo=16",
+      "source_ids": [
+        "s03"
+      ],
+      "checked_at": "2026-10-13",
+      "verification_scope": "공식 공개 자료의 장소·주소와 명시된 운영 정보 확인",
+      "live_availability": false,
+      "travel_minutes": null,
+      "enabled": true
+    },
+    {
+      "id": "p03",
+      "name": "엑스포다리 주변",
+      "setting": "outdoor",
+      "area": "대전 유성구 도룡동·갑천 일대",
+      "address": "공식 안내 주소: 대전 유성구 대덕대로 480 (도룡동)",
+      "verified_facts": [
+        "대전시 공식 안내에서 엑스포과학공원과 한밭수목원을 잇는 다리로 소개합니다."
+      ],
+      "hours_note": "현장 통행·행사 안내 확인",
+      "fee_krw": null,
+      "fee_note": "주변 산책 제안. 대여·체험·주차 비용은 포함하지 않습니다.",
+      "availability_note": "특정 조명·분수 가동이나 천변 통행을 보장하지 않습니다. 공식 주소는 위치 참고용이며 출발 지점까지의 길 안내가 아닙니다.",
+      "editorial_suggestion": "이미 근처라면 통행 가능한 산책로에서 15분 풍경 보기",
+      "official_url": "https://www.daejeon.go.kr/djBrand/djBrand50View.do?menuSeq=7863&ntatcSeq=1496647270",
+      "source_ids": [
+        "s04"
+      ],
+      "checked_at": "2026-10-13",
+      "verification_scope": "공식 공개 자료의 장소·주소와 명시된 운영 정보 확인",
+      "live_availability": false,
+      "travel_minutes": null,
+      "enabled": true
+    },
+    {
+      "id": "p04",
+      "name": "엑스포시민광장",
+      "setting": "outdoor",
+      "area": "대전 서구 만년동",
+      "address": "대전광역시 서구 둔산대로 169",
+      "verified_facts": [
+        "대전관광공사 공지에서 광장 소재지와 운영 안내 홈페이지를 확인했습니다."
+      ],
+      "hours_note": "방문 전 행사·사용 제한 안내 확인",
+      "fee_krw": null,
+      "fee_note": "광장 머무르기 제안. 유료 행사·대여시설·주차는 별도 확인하세요.",
+      "availability_note": "행사 일정에 따라 이용 분위기가 달라질 수 있습니다. 조용함이나 빈 좌석을 보장하지 않습니다.",
+      "editorial_suggestion": "행사가 없는 구역에서 15분 바깥 풍경 보기",
+      "official_url": "https://expoplaza.or.kr/",
+      "source_ids": [
+        "s05"
+      ],
+      "checked_at": "2026-10-13",
+      "verification_scope": "공식 공개 자료의 장소·주소와 명시된 운영 정보 확인",
+      "live_availability": false,
+      "travel_minutes": null,
+      "enabled": true
+    },
+    {
+      "id": "p05",
+      "name": "월평도서관 도서정보실",
+      "setting": "indoor_away",
+      "area": "대전 서구 갈마동",
+      "address": "대전광역시 서구 한밭대로 664",
+      "verified_facts": [
+        "2층 도서정보실은 평일 09:00~22:00, 주말 09:00~18:00로 안내되어 있습니다.",
+        "정기 휴관일은 매주 금요일입니다."
+      ],
+      "hours_note": "평일 09~22시 / 주말 09~18시 / 금요일 휴관",
+      "fee_krw": null,
+      "fee_note": "책 열람 제안. 대출·프로그램·부대시설 이용 조건은 공식 안내를 확인하세요.",
+      "availability_note": "공휴일과 임시 휴관은 별도로 확인하세요. 좌석 확보를 보장하지 않습니다.",
+      "editorial_suggestion": "운영 중이고 가까이 있다면 30분 동안 끌리는 책 펼쳐 보기",
+      "official_url": "https://www.seogu.go.kr/library/wolpyeonglib/contents/learning/content/content.motion?mnucd=MENU0600013",
+      "source_ids": [
+        "s06",
+        "s07",
+        "s08"
+      ],
+      "checked_at": "2026-10-13",
+      "verification_scope": "공식 공개 자료의 장소·주소와 명시된 운영 정보 확인",
+      "live_availability": false,
+      "travel_minutes": null,
+      "enabled": true
+    }
+  ],
+  "sources": [
+    {
+      "id": "s01",
+      "title": "한밭수목원 이용안내",
+      "publisher": "대전광역시 한밭수목원",
+      "url": "https://daejeon.go.kr/gar/contentsHtmlView.do?menuSeq=8024",
+      "checked_at": "2026-10-13"
+    },
+    {
+      "id": "s02",
+      "title": "한밭수목원 서원 임시 폐쇄 안내",
+      "publisher": "대전광역시 한밭수목원",
+      "url": "https://daejeon.go.kr/gar/board/boardNormalView.do?boardId=normal_0084&menuSeq=8033&ntatcSeq=1524162527",
+      "checked_at": "2026-10-13"
+    },
+    {
+      "id": "s03",
+      "title": "관광 TOP10 유림공원",
+      "publisher": "유성구 문화관광",
+      "url": "https://www.yuseong.go.kr/prog/trrsrt/TRSE_01/tour/sub02_01/view.do?trrsrtNo=16",
+      "checked_at": "2026-10-13"
+    },
+    {
+      "id": "s04",
+      "title": "도시브랜드자산 50선 엑스포다리",
+      "publisher": "대전광역시",
+      "url": "https://www.daejeon.go.kr/djBrand/djBrand50View.do?menuSeq=7863&ntatcSeq=1496647270",
+      "checked_at": "2026-10-13"
+    },
+    {
+      "id": "s05",
+      "title": "엑스포시민광장 공지사항",
+      "publisher": "대전관광공사",
+      "url": "https://djto.kr/kor/board.do?bbsIdx=13449&menuIdx=606",
+      "checked_at": "2026-10-13"
+    },
+    {
+      "id": "s06",
+      "title": "월평도서관 이용시간",
+      "publisher": "대전광역시 서구",
+      "url": "https://www.seogu.go.kr/library/wolpyeonglib/contents/learning/content/content.motion?mnucd=MENU0600013",
+      "checked_at": "2026-10-13"
+    },
+    {
+      "id": "s07",
+      "title": "대전 도서관 여행 중 월평도서관 안내",
+      "publisher": "대전광역시 대전관광",
+      "url": "https://daejeontour.co.kr/month_djt/11",
+      "checked_at": "2026-10-13"
+    },
+    {
+      "id": "s08",
+      "title": "월평도서관 하절기 운영 시간 안내",
+      "publisher": "대전광역시 서구",
+      "url": "https://www.seogu.go.kr/library/wolpyeonglib/contents/learning/board/09/board.09.001.motion?bmode=detail&mnucd=MENU0600041&nttId=26291",
+      "checked_at": "2026-10-13"
+    }
+  ]
+}
